@@ -40,14 +40,20 @@ body {
     font-family: 'Courier New', Courier, monospace;
     letter-spacing: 2px;
 }
-
-/* 🔹 Auth Boxes (Flexbox for Side-by-Side Layout) */
 .auth-boxes {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 30px;
-    flex-wrap: wrap;
+    flex-wrap: wrap;  /* Ensures boxes wrap on small screens */
+    flex-direction: row; /* Default for larger screens */
+}
+
+/* 📱 Mobile Responsive Fix */
+@media (max-width: 768px) {
+    .auth-boxes {
+        flex-direction: column; /* Stack boxes on small screens */
+    }
 }
 
 /* 🔹 Box Styling */
