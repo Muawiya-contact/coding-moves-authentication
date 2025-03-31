@@ -20,88 +20,92 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // 🎯 **Sign-Up Function (With Auto Welcome Email)**
-function signUp() {
+async function signUp() {
     let name = document.getElementById("signupName").value.trim();
     let email = document.getElementById("signupEmail").value.trim();
     let password = document.getElementById("signupPassword").value.trim();
-
-    if (password.length < 8) {
-        alert("⚠️ Password must be at least 8 characters long.");
-        return;
-    }
 
     if (!name || !email || !password) {
         alert("⚠️ Please fill in all fields.");
         return;
     }
 
-    auth.createUserWithEmailAndPassword(email, password)
-        .then((userCredential) => {
-            let user = userCredential.user;
+    if (password.length < 8) {
+        alert("⚠️ Password must be at least 8 characters long.");
+        return;
+    }
 
-            // Store user data in Firestore
-            return db.collection("users").doc(user.uid).set({ name, email }).then(() => {
-                // Send Welcome Email via EmailJS
-                return emailjs.send("service_dmhhk6j", "template_jquit7z", {
-                    user_name: name,
-                    user_email: email,
-                    to_email: email
-                });
-            }).then(() => {
-                alert("✅ Sign-Up Successful! Welcome email sent to " + email);
-                window.location.href = "welcome.html";
-            }).catch((error) => {
-                console.error("❌ Email Sending Failed:", error);
-                alert("✅ Sign-Up Successful! But email failed to send.");
-                window.location.href = "welcome.html";
-            });
+    try {
+        let userCredential = await auth.createUserWithEmailAndPassword(email, password);
+        let user = userCredential.user;
 
-        })
-        .catch((error) => alert("❌ " + error.message));
+        // Store user data in Firestore
+        await db.collection("users").doc(user.uid).set({ name, email });
+
+        // Send Welcome Email via EmailJS
+        await emailjs.send("service_dmhhk6j", "template_jquit7z", {
+            user_name: name,
+            user_email: email,
+            to_email: email
+        });
+
+        alert("✅ Sign-Up Successful! Welcome email sent to " + email);
+        window.location.href = "welcome.html";
+    } catch (error) {
+        console.error("❌ Error: ", error);
+        alert("❌ " + error.message);
+    }
 }
 
-// 🎯 **Login Function**
-function logIn() {
+// 🎯 **Login Function (With Email Notification)**
+async function logIn() {
     let email = document.getElementById("loginEmail").value.trim();
     let password = document.getElementById("loginPassword").value.trim();
 
-    auth.signInWithEmailAndPassword(email, password)
-        .then(() => {
-            alert("✅ Login Successful!");
-            window.location.href = "welcome.html";
-        })
-        .catch((error) => alert("❌ " + error.message));
+    if (!email || !password) {
+        alert("⚠️ Please enter your email and password.");
+        return;
+    }
+
+    try {
+        let userCredential = await auth.signInWithEmailAndPassword(email, password);
+        let user = userCredential.user;
+
+        // Send Login Notification Email using EmailJS
+        await emailjs.send("service_dmhhk6j", "template_login_notify", {
+            user_email: email,
+            to_email: email,
+            login_time: new Date().toLocaleString()
+        });
+
+        alert("✅ Login Successful! Email notification sent to " + email);
+        window.location.href = "welcome.html";
+    } catch (error) {
+        console.error("❌ Error: ", error);
+        alert("❌ " + error.message);
+    }
 }
 
-// 🎯 **Logout Function (Deletes User Data)**
-function logOut() {
-    let user = auth.currentUser;
-
-    if (user) {
-        // Delete user data from Firestore
-        db.collection("users").doc(user.uid).delete().then(() => {
-            return user.delete(); // Delete user from Firebase Auth
-        }).then(() => {
-            alert("✅ Logged out and data deleted!");
-            window.location.href = "index.html";
-        }).catch((error) => {
-            console.error("❌ Error deleting user:", error);
-            alert("❌ Logout failed. Try again.");
-        });
-    } else {
-        alert("⚠️ No user is logged in.");
+// 🎯 **Logout Function**
+async function logOut() {
+    try {
+        await auth.signOut();
+        alert("✅ Logged Out!");
+        window.location.href = "index.html";
+    } catch (error) {
+        console.error("❌ Error logging out: ", error);
+        alert("❌ Logout failed. Try again.");
     }
 }
 
 // 🎯 **Check User State on Welcome Page**
-auth.onAuthStateChanged((user) => {
+auth.onAuthStateChanged(async (user) => {
     if (user) {
-        db.collection("users").doc(user.uid).get().then((doc) => {
-            if (doc.exists) {
-                document.getElementById("userInfo").innerHTML = 
-                    `👋 Hello, <b>${doc.data().name}</b>! You are logged in as <b>${user.email}</b>.`;
-            }
-        });
+        let doc = await db.collection("users").doc(user.uid).get();
+        if (doc.exists) {
+            document.getElementById("userInfo").innerHTML = 
+                `👋 Hello, <b>${doc.data().name}</b>! You are logged in as <b>${user.email}</b>.`;
+        }
     } else {
         console.log("❌ No user signed in");
     }
