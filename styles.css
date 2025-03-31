@@ -1,0 +1,89 @@
+/* 🌟 General Styles */
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(120deg, #89f7fe, #66a6ff);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+/* 🔹 Container */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+}
+strong{
+    font-family: 'Courier New', Courier, monospace;
+    color: blue;
+    text-decoration: underline;
+}
+/* 🔹 Box Styling */
+.box {
+    width: 300px;
+    padding: 20px;
+    text-align: center;
+    background: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+    border: 3px solid transparent;
+    position: relative;
+    overflow: hidden;
+    border: solid 6px #007bff;
+    transition: all 0.3s ease-in-out;
+}
+
+/* 🔹 Logo */
+.logo-container {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.logo {
+    width: 100px;
+    height: auto;
+    animation: bounce 2s infinite;
+}
+
+/* 🎨 Input Fields */
+input {
+    width: 90%;
+    padding: 10px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    transition: all 0.3s ease-in-out;
+}
+
+input:focus {
+    border-color: #007bff;
+    box-shadow: 0px 0px 8px rgba(0, 123, 255, 0.5);
+    outline: none;
+}
+
+/* 🎨 Buttons */
+button {
+    background: #007bff;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 25px;
+    transition: all 0.3s ease-in-out;
+}
+
+button:hover {
+    background: #0056b3;
+    transform: scale(1.1);
+    box-shadow: 0px 4px 10px rgba(0, 91, 187, 0.5);
+}
+
+/* 🔥 Animations */
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}

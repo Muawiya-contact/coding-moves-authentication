@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Coding Moves</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- 🔹 Logo -->
+        <div class="logo-container">
+            <img src="logo.png" alt="Coding Moves Logo" class="logo">
+        </div>
+
+        <!-- 🔥 Sign-Up Box -->
+        <div class="box">
+            <h1>Sign in to</h1> <h2>Join <strong>Coding Moves</strong></h2>
+            <input type="text" id="signupName" placeholder="Full Name" required>
+            <input type="email" id="signupEmail" placeholder="Email Address" required>
+            <input type="password" id="signupPassword" placeholder="Password" required>
+            <button onclick="signUp()">Sign Up</button>
+        </div>
+
+        <!-- 🔥 Log-In Box -->
+        <div class="box">
+            <h1>Log in to</h1> <h2> Access Your Account</h2>
+            <input type="email" id="loginEmail" placeholder="Email Address" required>
+            <input type="password" id="loginPassword" placeholder="Password" required>
+            <button onclick="logIn()">Log In</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
